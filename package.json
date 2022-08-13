@@ -1,0 +1,24 @@
+{
+  "name": "floating-menu-and-i18n",
+  "version": "1.0.0",
+  "description": "Floating menu with CSS and JavaScript and i18n",
+  "license": "MIT",
+  "author": "huge-pancake",
+  "scripts": {
+    "serve": "wds --node-resolve --open --watch --port 1145"
+  },
+  "homepage": "https://github.com/huge-pancake/floating-menu#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huge-pancake/floating-menu.git"
+  },
+  "keywords": [
+    "menu"
+  ],
+  "bugs": {
+    "url": "https://github.com/huge-pancake/floating-menu/issues"
+  },
+  "devDependencies": {
+    "@web/dev-server": "^0.1.32"
+  }
+}
