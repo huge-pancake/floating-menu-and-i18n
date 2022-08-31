@@ -7,13 +7,18 @@ class i18n {
   static get map() {
     return {
       // senc
-      'startNewGame': ['01010011 01110100 01100001 01110010 01110100 00100000 01101110 01100101 01110111 00100000 01000111 01100001 01101101 01100101', 'Start new Game', '开始新的游戏', 'Начните новую игру', 'Commencer une nouvelle partie'],
-      'quitGame': ['01010001 01110101 01101001 01110100 00100000 01000111 01100001 01101101 01100101', 'Quit Game', '退出游戏', 'Выйти из игры', 'Quitter le jeu'],
-      'archives': ['01000001 01110010 01100011 01101000 01101001 01110110 01100101 01110011', 'Archives', '存档', 'Архив', 'Les archives'],
-      'settings': ['01010011 01100101 01110100 01110100 01101001 01101110 01100111 01110011', 'Settings', '设置', 'Настройки', 'Réglages'],
-      'back': ['01000010 01100001 01100011 01101011', 'Back', '返回', 'Назад', 'Retour'],
-      'language': ['01001100 01100001 01101110 01100111 01110101 01100001 01100111 01100101', 'Language', '语言', 'Язык', 'Langue']
-    }
+      startNewGame: ['Start new Game', '开始新的游戏', 'Начните новую игру', 'Commencer une nouvelle partie'],
+      startGame: ['Start Game', '开始游戏', 'Начать игру', 'Commencer le jeu.'],
+      quitGame: ['Quit Game', '退出游戏', 'Выйти из игры', 'Quitter le jeu'],
+      archives: ['Archives', '存档', 'Архив', 'Les archives'],
+      deleteArchive: ['Delete Archive', '删除存档', 'Удалить архив', "supprimer l'archive"],
+      settings: ['Settings', '设置', 'Настройки', 'Réglages'],
+      back: ['Back', '返回', 'Назад', 'Retour'],
+      language: ['Language', '语言', 'Язык', 'Langue'],
+      direction: ['Direction', '方向', 'Направление', 'Direction'],
+      vertical: ['Vertical', '纵向', 'Вертикальный', 'Vertical'],
+      vertical: ['Horizontal', '横向', 'Горизонтальный', 'Horizontal'],
+    };
   }
   static set(lang) {
     if (this.langs.indexOf(lang) === -1) {
@@ -28,16 +33,10 @@ class i18n {
     return this.map[key][this.langNum];
   }
   static get langs() {
-    return [
-      'bin',
-      'en',
-      'zh-CN',
-      'ru',
-      'fr',
-    ];
+    return ['en', 'zh-CN', 'ru', 'fr'];
   }
   static get lang() {
-    return window.localStorage.getItem('lang') || 'bin';
+    return window.localStorage.getItem('lang') || 'en';
   }
   static get langNum() {
     return this.langs.indexOf(this.lang);
@@ -45,58 +44,112 @@ class i18n {
 }
 // i18n end
 
-// menuPages start
-const menuPages = {
-  'lang': {
-    'dir': 'vert',
-    'text': i18n.get('language'),
-    'items': [
-      [i18n.get('back'), 'page("main")'],
-      ['Binary ASCII Code', 'i18n.set("bin")'],
-      ['English', 'i18n.set("en")'],
-      ['简体中文 (中国大陆)', 'i18n.set("zh-CN")'],
-      ['Русский', 'i18n.set("ru")'],
-      ['Français', 'i18n.set("fr")'],
-    ]
-  },
-  'main': {
-    'dir': 'vert',
-    'text': 'FloatingMenu&i18n',
-    'items': [
-      [i18n.get('startNewGame'), 'startNewGame()'],
-      [i18n.get('archives'), 'page("archives")'],
-      [i18n.get('settings'), 'page("settings")'],
-    ]
-  },
-  'archives': {
-    'dir': 'vert',
-    'text': i18n.get('archives'),
-    'items': [
-      [i18n.get('back'), 'page("main")'],
-    ]
-  },
-  'settings': {
-    'dir': 'vert',
-    'text': i18n.get('settings'),
-    'items': [
-      [i18n.get('back'), 'page("main")'],
-      [i18n.get('language'), 'page("lang")'],
-    ]
+// dir start
+class Dir {
+  static set(dir) {
+    if (this.dirs.indexOf(dir) === -1) {
+      console.error('Direction not support.');
+      return;
+    }
+    window.localStorage.setItem('dir', dir);
+    document.location.reload();
+    console.log('Dir changed to ' + dir);
   }
+  static get dirs() {
+    return ['vert', 'horiz'];
+  }
+  static get dir() {
+    return window.localStorage.getItem('dir') || 'vert';
+  }
+  static get dirNum() {
+    return this.langs.indexOf(this.lang);
+  }
+}
+// dir end
+
+// menuPages start
+const menuPages = () => {
+  return {
+    main: {
+      dir: Dir.dir,
+      text: 'FloatingMenu&i18n',
+      items: [
+        [i18n.get('startNewGame'), 'startNewGame()'],
+        [i18n.get('archives'), 'gotoPage("archives")'],
+        [i18n.get('settings'), 'gotoPage("settings")'],
+      ],
+    },
+    // << main
+    archives: {
+      dir: Dir.dir,
+      text: i18n.get('archives'),
+      items: [
+        [i18n.get('back'), 'gotoPage("main")'],
+        ['Archive 1', 'gotoPage("arch1")'],
+      ],
+    },
+    // << archives
+    arch1: {
+      dir: Dir.dir,
+      text: 'Archive 1',
+      items: [
+        [i18n.get('back'), 'gotoPage("archives")'],
+        [i18n.get('deleteArchive'), 'arch.delete("arch1")'],
+        [i18n.get('startGame'), 'arch.start("arch1")'],
+      ],
+    },
+    // >>
+    settings: {
+      dir: Dir.dir,
+      text: i18n.get('settings'),
+      items: [
+        [i18n.get('back'), 'gotoPage("main")'],
+        [i18n.get('language'), 'gotoPage("lang")'],
+        [i18n.get('direction'), 'gotoPage("dir")'],
+      ],
+    },
+    // << settings
+    lang: {
+      dir: Dir.dir,
+      text: i18n.get('language'),
+      items: [
+        [i18n.get('back'), 'gotoPage("settings")'],
+        ['English', 'i18n.set("en")'],
+        ['简体中文 (中国大陆)', 'i18n.set("zh-CN")'],
+        ['Русский', 'i18n.set("ru")'],
+        ['Français', 'i18n.set("fr")'],
+      ],
+    },
+    dir: {
+      dir: Dir.dir,
+      text: i18n.get('direction'),
+      items: [
+        [i18n.get('back'), 'gotoPage("settings")'],
+        [i18n.get('vertical'), 'Dir.set("vert")'],
+        [i18n.get('vertical'), 'Dir.set("horiz")'],
+      ],
+    },
+    // >>
+    // >>
+  };
 };
 // pageMenus end
 
 // page start
-function page(page) {
+/**
+ * @param {string} which
+ */
+function gotoPage(which) {
+  const page = menuPages()[which];
   let text = document.createElement('p');
-  text.textContent = menuPages[page].text;
+  text.textContent = page.text;
   let menu = document.createElement('div');
   menu.classList.add('flo-menu');
-  menu.classList.add(menuPages[page].dir);
-  for (let i = 0; i < menuPages[page].items.length; i++) {
+  menu.classList.add(page.dir);
+  for (let i = 0; i < page.items.length; i++) {
     let item = document.createElement('button');
-    item.textContent = menuPages[page].items[i][0];
-    item.setAttribute('onclick', `PLDT.${menuPages[page].items[i][1]}`);
+    item.textContent = page.items[i][0];
+    item.setAttribute('onclick', `PLDT.${page.items[i][1]}`);
     menu.appendChild(item);
   }
   dialog.innerHTML = '';
@@ -114,16 +167,16 @@ function startNewGame() {
 // others end
 
 window.PLDT = {
-  'menuPages': menuPages,
-  'i18n': i18n,
-  'page': page,
+  i18n: i18n,
+  Dir: Dir,
+  menuPages: menuPages,
+  gotoPage: gotoPage,
   // others
-  'startNewGame': startNewGame,
+  startNewGame: startNewGame,
 };
 
 // ---- All PUBLIC DATA ---- END
 
 const dialog = document.querySelector('.dialog');
 
-page('main');
-
+gotoPage('main');
