@@ -15,10 +15,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: monospace;
-  /* background-image: url('./bg.jpg'); */
-  /* background-size: cover; */
-  /* backdrop-filter: blur(2px) brightness(0.55); */
+  font-family: sans-serif;
+  /* background-image: url('./bg.jpg');
+  background-size: cover;
+  backdrop-filter: blur(2px) brightness(0.25); */
   overflow: hidden;
 }
 

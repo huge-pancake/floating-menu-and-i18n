@@ -6,7 +6,6 @@ import { FloatingMenu } from './floating-menu.js';
 class i18n {
   static get map() {
     return {
-      // senc
       startNewGame: ['Start new Game', '开始新的游戏', 'Начните новую игру', 'Commencer une nouvelle partie'],
       startGame: ['Start Game', '开始游戏', 'Начать игру', 'Commencer le jeu.'],
       quitGame: ['Quit Game', '退出游戏', 'Выйти из игры', 'Quitter le jeu'],
@@ -17,7 +16,7 @@ class i18n {
       language: ['Language', '语言', 'Язык', 'Langue'],
       direction: ['Direction', '方向', 'Направление', 'Direction'],
       vertical: ['Vertical', '纵向', 'Вертикальный', 'Vertical'],
-      vertical: ['Horizontal', '横向', 'Горизонтальный', 'Horizontal'],
+      horizontal: ['Horizontal', '横向', 'Горизонтальный', 'Horizontal'],
     };
   }
   static set(lang) {
@@ -86,6 +85,7 @@ const menuPages = () => {
       items: [
         [i18n.get('back'), 'gotoPage("main")'],
         ['Archive 1', 'gotoPage("arch1")'],
+        ['Archive 2', 'gotoPage("arch2")'],
       ],
     },
     // << archives
@@ -96,6 +96,15 @@ const menuPages = () => {
         [i18n.get('back'), 'gotoPage("archives")'],
         [i18n.get('deleteArchive'), 'arch.delete("arch1")'],
         [i18n.get('startGame'), 'arch.start("arch1")'],
+      ],
+    },
+    arch2: {
+      dir: Dir.dir,
+      text: 'Archive 2',
+      items: [
+        [i18n.get('back'), 'gotoPage("archives")'],
+        [i18n.get('deleteArchive'), 'arch.delete("arch2")'],
+        [i18n.get('startGame'), 'arch.start("arch2")'],
       ],
     },
     // >>
@@ -126,7 +135,7 @@ const menuPages = () => {
       items: [
         [i18n.get('back'), 'gotoPage("settings")'],
         [i18n.get('vertical'), 'Dir.set("vert")'],
-        [i18n.get('vertical'), 'Dir.set("horiz")'],
+        [i18n.get('horizontal'), 'Dir.set("horiz")'],
       ],
     },
     // >>
